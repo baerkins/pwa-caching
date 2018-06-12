@@ -1,3 +1,8 @@
+// Refs
+// https://developers.google.com/web/fundamentals/push-notifications/
+// https://developers.google.com/web/fundamentals/push-notifications/display-a-notification
+
+
 // Register and install Service Worker
 if ('serviceWorker' in navigator) {
 
@@ -9,16 +14,16 @@ if ('serviceWorker' in navigator) {
       })
       .then(function (reg) {
         if (reg.installing) {
-          console.log('Service worker installing');
+          // console.log('Service worker installing');
         } else if (reg.waiting) {
-          console.log('Service worker installed');
+          // console.log('Service worker installed');
         } else if (reg.active) {
-          console.log('Service worker active');
+          // console.log('Service worker active');
         }
       })
       .catch(function (error) {
         // registration failed
-        console.log('Registration failed with ' + error);
+        // console.log('Registration failed with ' + error);
       });
   }
 }
@@ -50,7 +55,7 @@ function requestSubscription() {
       // Create a new subscription if one does not already exist
       if (sub === null) {
 
-        console.log('Subscription does not exist');
+        // console.log('Subscription does not exist');
 
         // Encode the Vapid key to Uint8Array
         var convertedVapidPublicKey = urlBase64ToUint8Array(vapidPublicKey);
@@ -64,7 +69,7 @@ function requestSubscription() {
       } else {
 
         // We have a subscription
-        console.log('Existing subscription:', sub);
+        // console.log('Existing subscription:', sub);
 
         return sub;
 
@@ -72,6 +77,8 @@ function requestSubscription() {
     })
     .then(function (newSub) {
       console.log('New Subscription Object:', newSub);
+      var sub = JSON.stringify({ subscription: newSub });
+
       // Send subscription object to the endpoint of the server
       return fetch('https://dev-philly-pwa.pantheonsite.io/subscribe/app', {
         method: 'POST',
@@ -80,7 +87,7 @@ function requestSubscription() {
           'Accept': 'application/json'
         },
         mode: 'no-cors',
-        body: JSON.stringify({ subscription: newSub })
+        body: sub
       })
     })
     .then(function (res) {
@@ -96,6 +103,66 @@ function requestSubscription() {
 }
 
 requestSubscription();
+
+
+// Display Notifications
+navigator.serviceWorker.addEventListener('message', function (event) {
+
+  if (event.data) {
+    data = JSON.parse(event.data);
+    console.log(data);
+
+    // If message is passed
+    if (data.msg) {
+
+      // Add message content to alert box, display alert box
+      document.getElementById('alert-message').innerHTML = data.msg;
+      document.getElementById('alert-box').classList.add('visible');
+      setTimeout(function() {
+        document.getElementById('alert-box').classList.remove('visible');
+      }, 5000);
+
+    // Notification
+    } else if (data.title) {
+
+      // Wait for the service worker
+      navigator.serviceWorker.ready
+
+        // Build notification options
+        // https://tests.peter.sh/notification-generator/
+        .then(function (swreg) {
+
+          var options = {
+            body: data.body
+          };
+
+          if (data.tag) {
+            options.tag = data.tag;
+          }
+
+          if (data.dir) {
+            options.dir = data.dir;
+          }
+
+          if (data.lang) {
+            options.lang = data.lang;
+          }
+
+          if (data.icon) {
+            options.icon = data.icon;
+          }
+
+          if (data.renotify && data.renotify == "true") {
+            options.renotify = true;
+          }
+
+          swreg.showNotification(data.title, options);
+        });
+    }
+  }
+
+});
+
 
 
 

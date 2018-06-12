@@ -1,5 +1,5 @@
 const rootPath = ''; // `/pwa-caching` when live
-const currentCache = 'v3';
+const currentCache = 'v4';
 
 // Installing Service Worker. This is the perfect time to create and populate our local cache!
 // Learn more about the Cache Interface:
