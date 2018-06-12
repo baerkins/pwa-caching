@@ -179,3 +179,24 @@ footer {
 .char-contact {
   grid-area: contact;
 }
+
+.alert {
+  background-color: #233421;
+  color: green;
+  font-family: 'Consolas', 'Menlo', 'Monaco', monospace;
+  font-weight: 400;
+  display: flex;
+  justify-content: space-between;
+  padding: 30px;
+  display: none;
+}
+
+.alert-title {
+  color: #CB1F26;
+  text-decoration: underline;
+  margin-bottom: 10px;
+}
+
+.alert-message {
+  color: #BFCC62;
+}

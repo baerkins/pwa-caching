@@ -5,16 +5,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="assets/style.css">
-  <link rel="manifest" href="./manifest.json">
+  <link rel="manifest" src="manifest.json" />
   <title>Star Wars | Characters</title>
 </head>
 
 <body>
+
   <div class="wrapper">
     <header class="header">
       <img class="logo" src="assets/images/starwarslogo.svg" alt="Star Wars Logo" />
       <h1>Characters</h1>
     </header>
+
+    <div class="alert">
+      <div class="content">
+        <div class="alert-title">Incoming Message:</div>
+        <div class="alert-message"></div>
+      </div>
+      <div class="alert-badge">
+        <img src="/assets/images/rebellion.svg" alt="Rebellion" width="75px" height="75px" />
+      </div>
+    </div>
 
     <div class="characters"></div>
     <div class="loader">
