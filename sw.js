@@ -1,15 +1,59 @@
 const rootPath = ''; // `/pwa-caching` when live
 const currentCache = 'v4';
 
+// Push Event
+// ----------
+self.addEventListener('push', function (event) {
+
+  var data = {};
+
+  if (event.data) {
+    data = JSON.parse(event.data.text());
+  }
+
+  console.log('Push data:', data);
+
+  // Send the data to all clients, triggering navigator.serviceWorker.onmessage in each client.
+  event.waitUntil(
+    clients.claim().then(function () {
+      return self.clients.matchAll().then(function (clients) {
+        return Promise.all(clients.map(function (client) {
+          return client.postMessage(event.data.text());
+        }));
+      });
+    })
+  );
+
+});
+
+// On notification click
+// ---------------------
+self.addEventListener('notificationclick', function (event) {
+  var notification = event.notification;
+  var action = event.action;
+
+  console.log('Notification click', 'Notification:', notification);
+  console.log('Notification click', 'Action:', action);
+});
+
+// On notification close
+// ---------------------
+self.addEventListener('notificationclose', function (event) {
+  // Do Stuff
+  // update analytics data.
+  console.log('Notification close', event);
+});
+
+
+/********************
+ ** Start Caching
+ ********************/
+
 // Installing Service Worker. This is the perfect time to create and populate our local cache!
 // Learn more about the Cache Interface:
 // https://developer.mozilla.org/en-US/docs/Web/API/Cache
 self.addEventListener('install', function(event) {
 
-
-  /********************
-   ** Start Caching
-   ********************/
   event.waitUntil(
     caches
       .open(currentCache)
@@ -39,21 +83,11 @@ self.addEventListener('install', function(event) {
         return self.skipWaiting();
       })
   );
-<<<<<<< HEAD
-=======
-  /********************
-   ** End Caching
-   ********************/
->>>>>>> 7abc3d5cd7c11873abb900589e5073d9bb05a4f9
 });
 
-// Deleting old Caches during activation
+ // Deleting old Caches during activation
 self.addEventListener('activate', function(event) {
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 7abc3d5cd7c11873abb900589e5073d9bb05a4f9
   // Names of caches you want to preserve
   var cacheWhitelist = [currentCache];
 
@@ -74,13 +108,8 @@ self.addEventListener('activate', function(event) {
         return self.clients.claim();
       })
   );
-<<<<<<< HEAD
-=======
-  /********************
-   ** End Caching
-   ********************/
->>>>>>> 7abc3d5cd7c11873abb900589e5073d9bb05a4f9
 });
+
 
 // Getting the cached content from the cache first.
 self.addEventListener('fetch', function(event) {
@@ -103,11 +132,7 @@ self.addEventListener('fetch', function(event) {
 
             // console.warn('[Cloned response]:', responseClone);
             caches.open(currentCache).then(function(cache) {
-<<<<<<< HEAD
-              cache.put(event.request, responseClone);
-=======
               // cache.put(event.request, responseClone);
->>>>>>> 7abc3d5cd7c11873abb900589e5073d9bb05a4f9
             });
             return response;
           })
@@ -120,6 +145,10 @@ self.addEventListener('fetch', function(event) {
     })
   );
 });
+
+/********************
+ ** End Caching
+ ********************/
 
 
 

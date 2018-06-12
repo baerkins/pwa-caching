@@ -2,8 +2,8 @@
 // https://developers.google.com/web/fundamentals/push-notifications/
 // https://developers.google.com/web/fundamentals/push-notifications/display-a-notification
 
-
 // Register and install Service Worker
+// -----------------------------------
 if ('serviceWorker' in navigator) {
 
   // Checks if there's already a serviceWorker in control
@@ -14,26 +14,28 @@ if ('serviceWorker' in navigator) {
       })
       .then(function (reg) {
         if (reg.installing) {
-          // console.log('Service worker installing');
+          console.log('Service worker installing');
         } else if (reg.waiting) {
-          // console.log('Service worker installed');
+          console.log('Service worker installed');
         } else if (reg.active) {
-          // console.log('Service worker active');
+          console.log('Service worker active');
         }
       })
       .catch(function (error) {
         // registration failed
-        // console.log('Registration failed with ' + error);
+        console.log('Registration failed with ' + error);
       });
   }
 }
 
 
 // Vapid Key
+// ---------
 var vapidPublicKey = 'BL23yeb92L1CeXZ8ID6mk6GYEDKrN0Y6dWXyvyz5JCD2EsPNq_eyiZR-T_adK29aPpjVaVIJOYN2h5uaR8luaGU';
 
 
 // Configure the Subscription
+// --------------------------
 function requestSubscription() {
 
   // Bail if there isn't a service worker
@@ -41,7 +43,7 @@ function requestSubscription() {
     return;
   }
 
-  // Hold a future registration
+  // Hold for a future registration object
   var reg;
 
   // When the service worker is ready, attempt to create a subscription
@@ -106,6 +108,7 @@ requestSubscription();
 
 
 // Display Notifications
+// ---------------------
 navigator.serviceWorker.addEventListener('message', function (event) {
 
   if (event.data) {
@@ -114,13 +117,16 @@ navigator.serviceWorker.addEventListener('message', function (event) {
 
     // If message is passed
     if (data.msg) {
+      let showMsg;
+
+      clearTimeout(showMsg);
 
       // Add message content to alert box, display alert box
       document.getElementById('alert-message').innerHTML = data.msg;
       document.getElementById('alert-box').classList.add('visible');
-      setTimeout(function() {
+      showMsg = setTimeout(function() {
         document.getElementById('alert-box').classList.remove('visible');
-      }, 5000);
+      }, 10000);
 
     // Notification
     } else if (data.title) {
@@ -168,6 +174,7 @@ navigator.serviceWorker.addEventListener('message', function (event) {
 
 
 // Encode a Vapid key to Uint8Array
+// --------------------------------
 function urlBase64ToUint8Array(base64String) {
   var padding = '='.repeat((4 - base64String.length % 4) % 4);
   var base64 = (base64String + padding)
