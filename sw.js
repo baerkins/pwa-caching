@@ -1,10 +1,15 @@
-const rootPath = '/'; // `/pwa-caching` when live
-const currentCache = 'v1';
+const rootPath = ''; // `/pwa-caching` when live
+const currentCache = 'v4';
 
 // Installing Service Worker. This is the perfect time to create and populate our local cache!
 // Learn more about the Cache Interface:
 // https://developer.mozilla.org/en-US/docs/Web/API/Cache
 self.addEventListener('install', function(event) {
+
+
+  /********************
+   ** Start Caching
+   ********************/
   event.waitUntil(
     caches
       .open(currentCache)
@@ -12,7 +17,7 @@ self.addEventListener('install', function(event) {
         return cache.addAll([
           `${rootPath}/`,
           `${rootPath}/index.html`,
-          `${rootPath}/app.js`,
+          // `${rootPath}/app.js`,
           `${rootPath}/data.js`,
           `${rootPath}/assets/style.css`,
           `${rootPath}/assets/images/starwarslogo.svg`,
@@ -34,11 +39,21 @@ self.addEventListener('install', function(event) {
         return self.skipWaiting();
       })
   );
+<<<<<<< HEAD
+=======
+  /********************
+   ** End Caching
+   ********************/
+>>>>>>> 7abc3d5cd7c11873abb900589e5073d9bb05a4f9
 });
 
 // Deleting old Caches during activation
 self.addEventListener('activate', function(event) {
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7abc3d5cd7c11873abb900589e5073d9bb05a4f9
   // Names of caches you want to preserve
   var cacheWhitelist = [currentCache];
 
@@ -59,6 +74,12 @@ self.addEventListener('activate', function(event) {
         return self.clients.claim();
       })
   );
+<<<<<<< HEAD
+=======
+  /********************
+   ** End Caching
+   ********************/
+>>>>>>> 7abc3d5cd7c11873abb900589e5073d9bb05a4f9
 });
 
 // Getting the cached content from the cache first.
@@ -82,7 +103,11 @@ self.addEventListener('fetch', function(event) {
 
             // console.warn('[Cloned response]:', responseClone);
             caches.open(currentCache).then(function(cache) {
+<<<<<<< HEAD
               cache.put(event.request, responseClone);
+=======
+              // cache.put(event.request, responseClone);
+>>>>>>> 7abc3d5cd7c11873abb900589e5073d9bb05a4f9
             });
             return response;
           })
