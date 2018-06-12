@@ -26,6 +26,8 @@ self.addEventListener('push', function (event) {
 
 });
 
+
+
 // On notification click
 // ---------------------
 self.addEventListener('notificationclick', function (event) {
@@ -36,6 +38,8 @@ self.addEventListener('notificationclick', function (event) {
   console.log('Notification click', 'Action:', action);
 });
 
+
+
 // On notification close
 // ---------------------
 self.addEventListener('notificationclose', function (event) {
@@ -43,6 +47,9 @@ self.addEventListener('notificationclose', function (event) {
   // update analytics data.
   console.log('Notification close', event);
 });
+
+
+
 
 
 /********************
